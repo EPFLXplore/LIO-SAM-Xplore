@@ -1,42 +1,305 @@
 <?xml version="1.0"?>
-<robot name="lio" xmlns:xacro="http://tixiaoshan.github.io/">
-  <xacro:property name="PI" value="3.1415926535897931" />
+<robot name="astra" xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <link name="chassis_link"></link>
+<!-- LINKS -->
+
+
+  <xacro:macro name="inertial_cylinder" params="mass length radius *origin">
+    <inertial>
+        <xacro:insert_block name="origin"/>
+        <mass value="${mass}" />
+        <inertia ixx="${(1/12) * mass * (3*radius*radius + length*length)}" ixy="0.0" ixz="0.0"
+                iyy="${(1/12) * mass * (3*radius*radius + length*length)}" iyz="0.0"
+                izz="${(1/2) * mass * (radius*radius)}" />
+    </inertial>
+  </xacro:macro>
 
   <link name="base_link"></link>
+
+  <link name="chassis_link"> 
+    <visual>
+      <geometry>
+        <box size="0.6 0.5 0.16"/>
+      </geometry>
+      <origin xyz="0.1 0 0.03"/>
+    </visual>
+  </link>
+
+  <!-- LEGS -->
+
+  <link name="leg_front_right">
+    <visual>
+      <geometry>
+        <cylinder length="0.5" radius="0.012"/>
+      </geometry>
+      <origin xyz="0.236 -0.0835 0" rpy="1.57075 0 1.23073"/>
+    </visual>
+  </link>
+
+  <link name="leg_front_left">
+    <visual>
+      <geometry>
+        <cylinder length="0.5" radius="0.012"/>
+      </geometry>
+      <origin xyz="0.236 0.0835 0" rpy="-1.57075 0 -1.23073"/>
+    </visual>
+  </link>
+
+  <link name="leg_rear_right">
+    <visual>
+      <geometry>
+        <cylinder length="0.5" radius="0.012"/>
+      </geometry>
+      <origin xyz="-0.236 -0.0835 0" rpy="1.57075 0 -1.23073"/>
+    </visual>
+  </link>
+
+  <link name="leg_rear_left">
+    <visual>
+      <geometry>
+        <cylinder length="0.5" radius="0.012"/>
+      </geometry>
+      <origin xyz="-0.236 0.0835 0" rpy="-1.57075 0 1.23073"/>
+    </visual>
+  </link>
+
+  <!-- SCIENCE BAY -->
+
+  <!-- THING HOLDING WHEELS TO LEGS -->
+
+  <link name="holder_front_right">
+    <visual>
+      <geometry>
+        <cylinder length="0.101" radius="0.03"/>
+      </geometry>
+      <origin xyz="0 0 -0.03"/>
+    </visual>
+  </link>
+
+  <link name="holder_front_left">
+    <visual>
+      <geometry>
+        <cylinder length="0.101" radius="0.03"/>
+      </geometry>
+      <origin xyz="0 0 -0.03"/>
+    </visual>
+  </link>
+
+  <link name="holder_rear_right">
+    <visual>
+      <geometry>
+        <cylinder length="0.101" radius="0.03"/>
+      </geometry>
+      <origin xyz="0 0 -0.03"/>
+    </visual>
+  </link>
+
+  <link name="holder_rear_left">
+    <visual>
+      <geometry>
+        <cylinder length="0.101" radius="0.03"/>
+      </geometry>
+      <origin xyz="0 0 -0.03"/>
+    </visual>
+  </link>
+
+  <!-- WHEELS -->
+
+  <link name="wheel_front_right">
+    <visual>
+      <geometry>
+        <cylinder length="0.15" radius="0.133"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="1.57075 0 0"/>
+    </visual>
+  </link>
+
+  <link name="wheel_front_left">
+    <visual>
+      <geometry>
+        <cylinder length="0.15" radius="0.133"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="1.57075 0 0"/>
+    </visual>
+  </link>
+
+  <link name="wheel_rear_right">
+    <visual>
+      <geometry>
+        <cylinder length="0.15" radius="0.133"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="1.57075 0 0"/>
+    </visual>
+  </link>
+
+  <link name="wheel_rear_left">
+    <visual>
+      <geometry>
+        <cylinder length="0.15" radius="0.133"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="1.57075 0 0"/>
+    </visual>
+  </link>
+
+  
+
+<!-- JOINTS -->
   <joint name="base_link_joint" type="fixed">
     <parent link="base_link"/>
     <child link="chassis_link" />
-    <origin xyz="0 0 0" rpy="0 0 0" />
+    <origin xyz="0 0 .343" rpy="0 0 0"/>
   </joint>
 
-  <link name="lidar_link"> </link>
-  <joint name="lidar_joint" type="fixed">
-    <parent link="base_link" />
-    <child link="lidar_link" />
-    <origin xyz="0 0 0" rpy="0 0 0" />
+  <joint name="chassis_to_leg_front_right_joint" type="fixed">
+    <parent link="chassis_link"/>
+    <child link="leg_front_right"/>
+    <origin xyz="0 -0.25 0" rpy="0 0 0"/>
   </joint>
 
-  <link name="imu_link"> </link>
-  <joint name="imu_joint" type="fixed">
-    <parent link="chassis_link" />
-    <child link="imu_link" />
-    <origin xyz="0 0 0" rpy="0 0 0" />
+  <joint name="chassis_to_leg_front_left_joint" type="fixed">
+    <parent link="chassis_link"/>
+    <child link="leg_front_left"/>
+    <origin xyz="0 0.25 0" rpy="0 0 0"/>
   </joint>
 
-  <link name="laser_sensor_frame"> </link>
-  <joint name="laser_joint" type="fixed">
-    <parent link="imu_link" />
-    <child link="laser_sensor_frame" />
-    <origin xyz="0 0 0" rpy="0 0 0" />
+  <joint name="chassis_to_leg_rear_right_joint" type="fixed">
+    <parent link="chassis_link"/>
+    <child link="leg_rear_right"/>
+    <origin xyz="0 -0.25 0" rpy="0 0 0"/>
   </joint>
 
-  <link name="navsat_link"> </link>
-  <joint name="navsat_joint" type="fixed">
-    <parent link="chassis_link" />
-    <child link="navsat_link" />
-    <origin xyz="0 0 0" rpy="0 0 0" />
+  <joint name="chassis_to_leg_rear_left_joint" type="fixed">
+    <parent link="chassis_link"/>
+    <child link="leg_rear_left"/>
+    <origin xyz="0 0.25 0" rpy="0 0 0"/>
   </joint>
+  <!-- oak_right_camera_optical_frame -->
+  <!-- <joint name="chassis_to_plate_rear_joint" type="fixed">
+    <parent link="chassis_link"/>
+    <child link="plate_rear"/>
+    <origin xyz="-0.317 0 -0.0425" rpy="0 0 0"/>
+  </joint> -->
+
+  <joint name="leg_front_right_to_holder_front_right_joint" type="fixed">
+    <parent link="leg_front_right"/>
+    <child link="holder_front_right"/>
+    <origin xyz="0.472 -0.167 0" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="leg_front_left_to_holder_front_left_joint" type="fixed">
+    <parent link="leg_front_left"/>
+    <child link="holder_front_left"/>
+    <origin xyz="0.472 0.167 0" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="leg_rear_right_to_holder_rear_right_joint" type="fixed">
+    <parent link="leg_rear_right"/>
+    <child link="holder_rear_right"/>
+    <origin xyz="-0.472 -0.167 0" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="leg_rear_left_to_holder_rear_left_joint" type="fixed">
+    <parent link="leg_rear_left"/>
+    <child link="holder_rear_left"/>
+    <origin xyz="-0.472 0.167 0" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="holder_front_right_to_wheel_front_right_joint" type="fixed">
+    <parent link="holder_front_right"/>
+    <child link="wheel_front_right"/>
+    <origin xyz="0 0 -0.2035" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="holder_front_left_to_wheel_front_left_joint" type="fixed">
+    <parent link="holder_front_left"/>
+    <child link="wheel_front_left"/>
+    <origin xyz="0 0 -0.2035" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="holder_rear_right_to_wheel_rear_right_joint" type="fixed">
+    <parent link="holder_rear_right"/>
+    <child link="wheel_rear_right"/>
+    <origin xyz="0 0 -0.2035" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="holder_rear_left_to_wheel_rear_left_joint" type="fixed">
+    <parent link="holder_rear_left"/>
+    <child link="wheel_rear_left"/>
+    <origin xyz="0 0 -0.2035" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="chassis_to_lidar_axis" type="fixed">
+    <origin xyz="0.2 0.20 0.12" rpy="0 0 0"/>
+    <parent link="chassis_link"/>
+    <child link="lidar_axis"/>
+  </joint>
+
+  <link name="lidar_axis">
+    <visual>
+      <geometry>
+        <cylinder length="0.24" radius="0.005"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.24" radius="0.005"/>
+      </geometry>
+    </collision>
+    <xacro:inertial_cylinder mass="0.25" length="0.24" radius="0.005">
+      <origin xyz="0 0 0" />
+    </xacro:inertial_cylinder>
+  </link>
+
+  <!-- <joint name="lidar_joint" type="fixed">
+    <origin xyz="0.0 0 0.145" rpy="0 0 ${pi}"/> 
+    <parent link="lidar_axis"/>
+    <child link="lidar_link"/>
+  </joint>
+
+<joint name="lidar_sensor_joint" type="fixed">
+  <origin xyz="0.0 0 0.03618" rpy="0 0 ${pi}"/> 
+  <parent link="lidar_link"/>
+  <child link="lidar_sensor_frame"/>
+</joint>
+
+  <link name="lidar_link"></link> 
+
+    <link name="lidar_sensor_frame"></link>
+
+    <joint name="lidar_imu_joint" type="fixed">
+      <origin xyz="0.0 0 0.006" rpy="0 0 0"/> 
+      <parent link="lidar_link"/>
+      <child link="lidar_imu_frame"/>
+    </joint>
+
+    <link name="lidar_imu_frame"></link> -->
+
+
+
+
+    <joint name="lidar_sensor_joint" type="fixed">
+      <origin xyz="0.0 0 0.145" rpy="0 0 ${pi}"/> 
+      <parent link="lidar_axis"/>
+      <child link="lidar_sensor_frame"/>
+    </joint>
+  
+  <joint name="lidar_laser_joint" type="fixed">
+    <origin xyz="0.0 0 -0.03618" rpy="0 0 ${pi}"/> 
+    <parent link="lidar_sensor_frame"/>
+    <child link="lidar_link"/>
+  </joint>
+  
+    <link name="lidar_link"></link> 
+  
+      <link name="lidar_sensor_frame"></link>
+  
+      <joint name="lidar_imu_joint" type="fixed">
+        <origin xyz="0.0 0 -0.03618" rpy="0 0 ${pi}"/> 
+        <parent link="lidar_sensor_frame"/>
+        <child link="lidar_imu_frame"/>
+      </joint>
+  
+      <link name="lidar_imu_frame"></link>
+
 
 </robot>
