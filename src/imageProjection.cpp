@@ -563,9 +563,11 @@ public:
         // range image projection
         for (int i = 0; i < cloudSize; ++i)
         {
+
+            //TODO => check if - needed in x and y
             PointType thisPoint;
-            thisPoint.x = -laserCloudIn->points[i].x;
-            thisPoint.y = -laserCloudIn->points[i].y;
+            thisPoint.x = laserCloudIn->points[i].x;
+            thisPoint.y = laserCloudIn->points[i].y;
             thisPoint.z = laserCloudIn->points[i].z;
             thisPoint.intensity = laserCloudIn->points[i].intensity;
 
