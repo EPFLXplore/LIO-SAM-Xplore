@@ -327,11 +327,28 @@ public:
         std::lock_guard<std::mutex> lock2(odoLock);
 
         // make sure IMU data available for the scan
-        if (imuQueue.empty() ||
-            stamp2Sec(imuQueue.front().header.stamp) > timeScanCur ||
-            stamp2Sec(imuQueue.back().header.stamp) < timeScanEnd)
+        // if (imuQueue.empty() ||
+        //     stamp2Sec(imuQueue.front().header.stamp) > timeScanCur ||
+        //     stamp2Sec(imuQueue.back().header.stamp) < timeScanEnd)
+        // {
+        //     RCLCPP_INFO(get_logger(), "Waiting for IMU data ...");
+        //     RCLCPP_INFO(get_logger(), "Waiting for IMU data ...");
+
+        //     return false;
+        // }
+
+        if (imuQueue.empty()){
+            RCLCPP_INFO(get_logger(), "Empty queue...");
+            return false;
+
+        } 
+        if(stamp2Sec(imuQueue.front().header.stamp) > timeScanCur ){
+            RCLCPP_INFO(get_logger(), "Future timestamps...");
+            return false;
+        }
+        if( stamp2Sec(imuQueue.back().header.stamp) < timeScanEnd)
         {
-            RCLCPP_INFO(get_logger(), "Waiting for IMU data ...");
+            RCLCPP_INFO(get_logger(), "Past timestamps...");
             return false;
         }
 

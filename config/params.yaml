@@ -2,8 +2,10 @@
   ros__parameters:
 
     # Topics
-    pointCloudTopic: "/ouster/points"                   # Point cloud data
-    imuTopic: "/Imu"                        # IMU data
+    pointCloudTopic: "/points"   
+    # pointCloudTopic: "/ouster/points"            # Point cloud data
+    imuTopic: "/Imu"                             # IMU data
+    # imuTopic: "/ouster/imu"
     odomTopic: "odometry/imu"                    # IMU pre-preintegration odometry, same frequency as IMU
     gpsTopic: "odometry/gpsz"                    # GPS odometry topic from navsat, see module_navsat.launch file
 
