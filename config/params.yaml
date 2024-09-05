@@ -12,7 +12,7 @@
     # Frames
     lidarFrame: "lidar_link"
     baselinkFrame: "base_link"
-    odometryFrame: "odom_lio"
+    odometryFrame: "odom"
     mapFrame: "map"
 
     # GPS Settings
