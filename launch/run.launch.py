@@ -34,15 +34,6 @@ def generate_launch_description():
                 parameters=[parameter_file],
                 output='screen'
             ),
-            # Node(
-            #     package='robot_state_publisher',
-            #     executable='robot_state_publisher',
-            #     name='robot_state_publisher',
-            #     output='screen',
-            #     parameters=[{
-            #         'robot_description': Command(['xacro', ' ', xacro_path])
-            #     }]
-            # ),
             Node(
                 package="lio_sam",
                 executable="lio_sam_imuPreintegration",
@@ -76,6 +67,12 @@ def generate_launch_description():
                 executable="rviz2",
                 name="rviz2",
                 arguments=["-d", rviz_config_file],
+                output="screen",
+            ),
+            Node(
+                package="path_planning",
+                executable="odom_offset_node.py",
+                name="odom_offset_node",
                 output="screen",
             ),
             # IncludeLaunchDescription(
