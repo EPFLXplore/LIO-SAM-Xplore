@@ -27,13 +27,14 @@ def generate_launch_description():
     return LaunchDescription(
         [
             params_declare,
+
             Node(
                 package='tf2_ros',
                 executable='static_transform_publisher',
-                arguments='0.0 0.0 0.0 0.0 0.0 0.0 map odom'.split(' '),
-                parameters=[parameter_file],
+                arguments='17.228 -11.549 0.0 0.0 0.0 0.7071 0.7071 map odom'.split(' '),
                 output='screen'
             ),
+            
             Node(
                 package="lio_sam",
                 executable="lio_sam_imuPreintegration",
@@ -69,12 +70,12 @@ def generate_launch_description():
                 arguments=["-d", rviz_config_file],
                 output="screen",
             ),
-            Node(
-                package="path_planning",
-                executable="odom_offset_node.py",
-                name="odom_offset_node",
-                output="screen",
-            ),
+            # Node(
+            #     package="path_planning",
+            #     executable="odom_offset_node.py",
+            #     name="odom_offset_node",
+            #     output="screen",
+            # ),
             # IncludeLaunchDescription(
             #     PythonLaunchDescriptionSource(
             #         os.path.join(
